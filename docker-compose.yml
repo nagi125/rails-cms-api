@@ -19,7 +19,7 @@ services:
       TZ: 'Asia/Tokyo'
       RAILS_ENV: 'development'
       DATABASE_HOST: 'db'
-      DATABASE_NAME: 'rails_development'
+      DATABASE_NAME: 'app_development'
       DATABASE_USER: 'docker'
       DATABASE_PASSWORD: 'docker'
     volumes:
@@ -37,7 +37,7 @@ services:
       TZ: 'Asia/Tokyo'
       POSTGRES_USER: 'docker'
       POSTGRES_PASSWORD: 'docker'
-      POSTGRES_DB: 'rails_development'
+      POSTGRES_DB: 'app_development'
     volumes:
       - database:/var/lib/postgresql/data
       - ./.docker/db/sql:/docker-entrypoint-initdb.d
