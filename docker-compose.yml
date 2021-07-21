@@ -1,0 +1,73 @@
+version: '3'
+services:
+  nginx:
+    container_name: nginx
+    build:
+      context: .docker/nginx
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      - api
+
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      TZ: 'Asia/Tokyo'
+      RAILS_ENV: 'development'
+      DATABASE_HOST: 'db'
+      DATABASE_NAME: 'rails_development'
+      DATABASE_USER: 'docker'
+      DATABASE_PASSWORD: 'docker'
+    volumes:
+      - .:/app
+    expose:
+      - 3000
+    command: rails s -b '0.0.0.0'
+    depends_on:
+      - db
+
+  db:
+    image: postgres:12-alpine
+    container_name: db
+    environment:
+      TZ: 'Asia/Tokyo'
+      POSTGRES_USER: 'docker'
+      POSTGRES_PASSWORD: 'docker'
+      POSTGRES_DB: 'rails_development'
+    volumes:
+      - database:/var/lib/postgresql/data
+      - ./.docker/db/sql:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+
+  redis:
+    image: redis:6.0-alpine
+    container_name: redis
+    environment:
+      TZ: 'Asia/Tokyo'
+    command: redis-server --requirepass docker
+    volumes:
+      - redis:/data
+      - ./.docker/redis/conf:/user/local/etc/redis
+    ports:
+      - 6379:6379
+
+  mail:
+    image: schickling/mailcatcher
+    container_name: mail
+    ports:
+      - 1080:1080
+    expose:
+      - 1025
+
+networks:
+  default:
+    name: rails-cms
+
+volumes:
+  database:
+  redis:
