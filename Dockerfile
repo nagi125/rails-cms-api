@@ -16,3 +16,5 @@ WORKDIR /app
 RUN bundle install
 
 COPY . /app
+
+CMD ["/bin/bash", "/app/docker-entrypoint.sh"]
