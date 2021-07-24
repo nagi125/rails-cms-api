@@ -8,12 +8,11 @@ RUN apt-get update -qq && \
     apt-get clean && \
     rm -rf /var/cache/apt
 
-RUN mkdir /app
+WORKDIR /app
 
 COPY Gemfile Gemfile.lock /app/
 
-WORKDIR /app
-RUN bundle install
+RUN bundle install --path vendor/bundle
 
 COPY . /app
 
