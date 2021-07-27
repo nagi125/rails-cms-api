@@ -14,6 +14,4 @@ COPY Gemfile Gemfile.lock /app/
 
 RUN bundle install --path vendor/bundle
 
-COPY . /app
-
 CMD ["/bin/bash", "/app/docker-entrypoint.sh"]
